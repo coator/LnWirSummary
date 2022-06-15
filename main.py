@@ -46,61 +46,64 @@ def iterateIRs():
                 print(msg)
                 pass
             ## TODO: N/A does not show
-            irWorksheetValues = {
-          'Facility Name':ws['E3'].value,
-          'Technician':ws['E4'].value,
-          'Manager':ws['E5'].value,
-          'Date of Incident':ws['E6'].value.strftime("%m-%d-%y"),
-          'Start Time':ws['E7'].value,
-          'End Time and Date':ws['E8'].value,
-          'Type of Problem':ws['D10'].value,
-          'Description':ws['D12'].value,
-          'Devices Involved':ws['D14'].value,
-          'Brief Description':ws['A17'].value,
-          'Additional Details':ws['A23'].value,
-          'Additional Details Mgmt':ws['A28'].value,
-          'Type of Incident':ws['D33'].value,
-          'Cause':ws['D34'].value,
-          'Effect':ws['D35'].value,
-          'Lead':ws['D36'].value,
-          'Supervisor':ws['D37'].value,
-          'Machine Freeze':ws['D40'].value,
-          'Communication Error':ws['D41'].value,
-          'Tilts and/or Errors':ws['D42'].value,
-          'Connectivity':ws['D45'].value,
-          'Cash-Out':ws['D46'].value,
-          'Reboot Process':ws['D47'].value,
-          'Ram Clear Process':ws['D48'].value,
-          'EVERI Session History':ws['D51'].value,
-          'EVERI Event Log':ws['D52'].value,
-          'Machine Event History':ws['D53'].value,
-          'Digital Pictues':ws['D54'].value,
-          'Surveillance Tape':ws['D55'].value,
-          'Revenue Loss':ws['D58'].value,
-          'Parts Loss':ws['D59'].value}
-            count=0
-
-            for key, value in irWorksheetValues.items():
-                if value == 'nan':
-                    ##TODO: Logging needed
-                    msg = 'IR {} in column {} has a blank response.'.format(report,key)
+            try:
+                irWorksheetValues = {
+            'Facility Name':ws['E3'].value,
+            'Technician':ws['E4'].value,
+            'Manager':ws['E5'].value,
+            'Date of Incident':ws['E6'].value.strftime("%m-%d-%y"),
+            'Start Time':ws['E7'].value,
+            'End Time and Date':ws['E8'].value,
+            'Type of Problem':ws['D10'].value,
+            'Description':ws['D12'].value,
+            'Devices Involved':ws['D14'].value,
+            'Brief Description':ws['A17'].value,
+            'Additional Details':ws['A23'].value,
+            'Additional Details Mgmt':ws['A28'].value,
+            'Type of Incident':ws['D33'].value,
+            'Cause':ws['D34'].value,
+            'Effect':ws['D35'].value,
+            'Lead':ws['D36'].value,
+            'Supervisor':ws['D37'].value,
+            'Machine Freeze':ws['D40'].value,
+            'Communication Error':ws['D41'].value,
+            'Tilts and/or Errors':ws['D42'].value,
+            'Connectivity':ws['D45'].value,
+            'Cash-Out':ws['D46'].value,
+            'Reboot Process':ws['D47'].value,
+            'Ram Clear Process':ws['D48'].value,
+            'EVERI Session History':ws['D51'].value,
+            'EVERI Event Log':ws['D52'].value,
+            'Machine Event History':ws['D53'].value,
+            'Digital Pictues':ws['D54'].value,
+            'Surveillance Tape':ws['D55'].value,
+            'Revenue Loss':ws['D58'].value,
+            'Parts Loss':ws['D59'].value}
+                count=0
+                for key, value in irWorksheetValues.items():
+                    if value == 'nan':
+                        ##TODO: Logging needed
+                        msg = 'IR {} in column {} has a blank response.'.format(report,key)
+                        print(msg)
+                    else:
+                        pass
+                    ##TODO: Track Abbreviations
+                    abr = {'Suffolk':'SFK'}
+                    try:
+                        ir_name = str(irWorksheetValues['Facility Name']+'-'+irWorksheetValues['Date of Incident']+'-'+str(count))
+                        msg = ''
+                    except AttributeError as e:
+                        ##TODO:Logging 'error'
+                        msg='Invalid value for date on {}- date is set as {}'.format(report,irWorksheetValues['Date of Incident'])
+                        ir_name = str(irWorksheetValues['Facility Name']+'-'+irWorksheetValues['Date of Incident'])
+                    count=count+1
+                if msg:
                     print(msg)
-                else:
-                    pass
-                ##TODO: Track Abbreviations
-                abr = {'Suffolk':'SFK'}
-                try:
-                    ir_name = str(irWorksheetValues['Facility Name']+'-'+irWorksheetValues['Date of Incident']+'-'+str(count))
-                    msg = ''
-                except AttributeError as e:
-                    ##TODO:Logging 'error'
-                    msg='Invalid value for date on {}- date is set as {}'.format(report,irWorksheetValues['Date of Incident'])
-                    ir_name = str(irWorksheetValues['Facility Name']+'-'+irWorksheetValues['Date of Incident'])
-                count=count+1
-            if msg:
-                print(msg)
-            irOutputDict.update({ir_name:irWorksheetValues})
-            wb.close()
+                irOutputDict.update({ir_name:irWorksheetValues})
+                wb.close()
+            except:
+                print('error')
+                pass
     return irOutputDict
 
 
